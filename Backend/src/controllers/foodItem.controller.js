@@ -5,11 +5,11 @@ const { v4: uuid } = require("uuid");
 async function createFood(req, res) {
     try {
         const { name, description, video } = req.body;
-        const videoUrl = await storageService.uploadFile(req.file, `food_videos/${uuid()}_${req.file.originalname}`);
+        const videoUrl = await storageService.uploadFile(req.file.buffer, `food_videos/${uuid()}_${req.file.originalname}`);
         const newFoodItem = new foodItem({
             name: req.body.name,
             description: req.body.description,
-            video: fileUploadResult.url,
+            video: videoUrl,
             foodPartner: req.foodPartner._id
         });
         await newFoodItem.save();
@@ -20,7 +20,6 @@ async function createFood(req, res) {
         res.status(500).json({ message: "Internal server error" });
     };
 }
-
 
 
 module.exports = {
