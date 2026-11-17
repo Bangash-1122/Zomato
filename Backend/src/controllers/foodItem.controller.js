@@ -1,17 +1,19 @@
 const foodItem = require("../models/foodItem.model");
 const storageService = require("../services/storge.service");
+const { v4: uuid } = require("uuid");
 
 async function createFood(req, res) {
     try {
         const { name, description, video } = req.body;
-        const videoUrl = await storageService.uploadFile(req.file, `food_videos/${Date.now()}_${req.file.originalname}`);
+        const videoUrl = await storageService.uploadFile(req.file, `food_videos/${uuid()}_${req.file.originalname}`);
         const newFoodItem = new foodItem({
-            name,
-            description,
-            video: videoUrl
+            name: req.body.name,
+            description: req.body.description,
+            video: fileUploadResult.url,
+            foodPartner: req.foodPartner._id
         });
         await newFoodItem.save();
-        res.status(201).json(newFoodItem);
+        res.status(201).json({ message: "Food item created successfully", foodItem: newFoodItem });
     }
     catch (error) {
         console.error("Error creating food item:", error);
