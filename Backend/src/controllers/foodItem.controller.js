@@ -21,7 +21,18 @@ async function createFood(req, res) {
     };
 }
 
+async function getFoodItems(req, res) {
+    try {
+        const foodItems = await foodItem.find().populate('foodPartner', 'name email');
+
+        res.status(200).json({ message: "Food items fetched successfully", foodItems });
+    } catch (error) {
+        console.error("Error fetching food items:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+}
 
 module.exports = {
-    createFood
+    createFood,
+    getFoodItems
 };
