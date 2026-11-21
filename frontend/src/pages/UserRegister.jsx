@@ -1,6 +1,26 @@
-import AuthPage from './AuthPage.jsx'
+import AuthPage from './AuthPage.jsx';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 function UserRegister() {
+
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const data = Object.fromEntries(formData);
+
+    try {
+      const response = await axios.post('http://localhost:3001/api/auth/user/register', data);
+      console.log(response.data);
+      // Redirect to login page after successful registration
+      navigate('/');
+    } catch (error) {
+      console.error('Error registering user:', error);
+    }
+  };
+
   return (
     <AuthPage
       partner={false}
